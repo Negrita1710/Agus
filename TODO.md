@@ -1,0 +1,3 @@
+- [x] Corregir la función `relacionarlote` en `work/index.php` para aceptar el parámetro `id_remate` y pasarlo en la URL de `formlote.php`.
+- [x] Corregir el bug en `funcion/accion/lotes/formlote.php` donde se usa `$id_remate['fecha']` en lugar de `$remate_actual['fecha']` en el título.
+- [x] Para el caso de actualizar lote, agregar lógica para mostrar el remate al que pertenece el lote en el título.
