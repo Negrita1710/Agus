@@ -34,7 +34,7 @@
         } else {
             // Crear nuevo usuario
             $clientes = new Clientes($nombre, $apellido, $direccion, $telefono, $documento, $tipo_documento);
-        // $clientes->guardar();
+            $clientes->guardar();
             if ($clientes->getId() !=null) {
                 echo "creado cliente ha";
                 echo  '<a href="../../../work/index.php">Volver al inicio</a>';

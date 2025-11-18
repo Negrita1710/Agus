@@ -1,37 +1,40 @@
 <?php
-require_once ' ../../percistencia/objetos.php';
+session_start();
+require_once '../../percistencia/objetos.php';
 
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $input = json_decode(file_get_contents('php://input'), true);
-
-            $id = $input['id'] ?? 0;
+header('Content-Type: application/json'); // siempre JSON
 
 
-            $id = $input['id'] ?? 0;
+try {
+   $objeto = $_POST['objetos'] ??[];
+
+    // Capturar datos enviados
+    $id         = $_POST['id'] ?? 0;
+    $id_boleta  = $_POST['id_boleta'] ?? '';
+    $imagenes   = $_POST['imagenes'] ?? '';
+    $nombre      = $_POST['nombre'] ?? '';
+    $cantidad = $_POST['cantidad'] ?? '';
+    $descripcion = $_POST['descripcion'] ?? '';
+    $valor_esperado = $_POST['valor_esperado'] ?? '';
 
 
-            $nombre = $input['nombre'] ?? '';
-            $cantidad = $input['cantidad'] ?? '';
-            $descripcion = $input['descripcion'] ?? '';
-            $valor_esperado = $input['valor_esperado'] ??'';
-            
+   
+        // Crear nueva boleta
+        $objeto = new Objetos($id_boleta, $cantidad, $nombre, $descripcion, $valor_esperado);
+        $objeto->guardar();
+        
+        var_dump($_POST, $_FILES);
 
-
-            if ($id > 0) {
-                // Actualizar productos existentes
-                $objetos = Objetos::buscarPorId($id);
-                if ($objetos) {
-               
-                    $objetos->setId($id);
-                    $objetos->setNombre($nombre);
-                    $objetos->setCantidad($cantidad);
-                    $objetos->setDescripcion($descripcion);
-                    $objetos->setValorEsperado($valor_esperado);
-                    $objetos->guardar();
-                }else {
-                    "ID no encontrado para actualizar.";
-            
+        if ($objeto->getId()) {
+            echo json_encode(['ok' => true, 'id' => $objeto->getId()]);
+            exit;
+        } else {
+            echo json_encode(['ok' => false, 'error' => 'Error al crear la boleta']);
+            exit;
         }
     }
+    catch (Exception $e) {
+    echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+    exit;
 }
-?>
+  

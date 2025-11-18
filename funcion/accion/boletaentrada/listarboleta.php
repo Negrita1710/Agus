@@ -5,7 +5,7 @@
     require_once  '../../percistencia/boletaentrada.php';
     require_once  '../../percistencia/clientes.php';
 
-    $boletas = BoletaEntrada::recuperarTodos();
+    $boletaentrada = BoletaEntrada::recuperarTodos();
 
 ?>
 
@@ -34,16 +34,16 @@
                     <th>Accion</th>
 
                 </tr>
-                <?php foreach ($boletas as $boleta): ?>
+                <?php foreach ($boletaentrada as $boletaEntrada): ?>
                     <tr>
                         <?php
-                        $cliente = Clientes::buscarPorId($boleta['id_cliente']);
+                        $cliente = Clientes::buscarPorId($boletaEntrada['id_cliente']);
                         ?>
-                        <td><?php echo htmlspecialchars($boleta['id']); ?></td>
-                        <td><?php echo htmlspecialchars($boleta['moneda']); ?></td>
-                        <td><?php echo htmlspecialchars($boleta['fecha']); ?></td>
+                        <td><?php echo htmlspecialchars($boletaEntrada['id']); ?></td>
+                        <td><?php echo htmlspecialchars($boletaEntrada['moneda']); ?></td>
+                        <td><?php echo htmlspecialchars($boletaEntrada['fecha']); ?></td>
                         <td><?php echo htmlspecialchars($cliente ? $cliente->getNombre() . ' ' . $cliente->getApellido() : ''); ?></td>
-                        <td onclick="agregarboleta(<?php echo htmlspecialchars($boleta['id']); ?>)">
+                        <td onclick="agregarboleta(<?php echo htmlspecialchars($boletaEntrada['id']); ?>)">
                         <i title="editar" class="fa-solid fa-pencil"></i> </td>
                         
                     </tr>

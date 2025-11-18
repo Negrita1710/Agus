@@ -351,64 +351,62 @@ document.addEventListener('submit', function (e) {
         
    
     };
-    function editarproducto(id) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById('inresultado').innerHTML = this.responseText;
-            }
-        };
-        xhr.open('GET', '../funcion/accion/boletaentrada/editarproducto.php?id=' + id, true);
-        xhr.send();
-    };
-// Reemplaza la función ActualizarBoleta para enviar FormData en vez de JSON
-function agregarFilaProducto() {
+
+
+
+  function guardarCambios() {
+    const form = document.getElementById('form-productos');
+    if (!form) {
+        console.error("No se encontró el form");
+        return;
+    }
+
+    const data = new FormData(form);
+
+    // Agregar campos extra
+    data.append('moneda', document.getElementById('moneda').value);
+    data.append('fecha', document.getElementById('fecha').value);
+    data.append('id_cliente', document.getElementById('id_cliente').value);
+    data.append('id', document.getElementById('idboleta').value);
+
+    alert('Guardando cambios...');
+
+    fetch('../funcion/accion/boletaentrada/actualizarboletadeentrada.php', {
+        method: 'POST',
+        body: data,
+        cache: 'no-store'
+    })
+    .then(resp => resp.json())
+    .then(json => {
+        if (json.ok) {
+            alert('Guardado exitosamente');
+            location.reload();
+        } else {
+            alert('Error: ' + (json.error || 'respuesta inesperada'));
+        }
+    })
+    .catch(err => {
+        console.error('Error en la solicitud:', err);
+        alert('Error al guardar la boleta');
+    });
+}
+function guardarProducto(){
   const form = document.getElementById('form-productos');
   const productosBody = document.getElementById('productos-body');
   console.log("form:", form);
   console.log("productosBody:", productosBody);
   if (!form || !productosBody) {
-    console.error("No se encontró el form o el tbody");
-    return;
+  console.error("No se encontró el form o el tbody");
+   return;
   }
+    const data = new FormData(form);
+    alert('Guardando cambios...');
 
-  const data = new FormData(form);
-  alert('Guardando cambios...');
-
-  fetch('../funcion/accion/boletaentrada/actualizarboleta.php', {
+    fetch('../funcion/accion/boletaentrada/editarproductos.php', {
     method: 'POST',
     body: data,
     cache: 'no-store'
   })
-  .then(res => res.json())
-  .then(json => {
-    if (json.ok) {
-      alert('Operación realizada con éxito');
-
-      // ✅ Agregar nueva fila vacía después de guardar
-      const rows = productosBody.querySelectorAll('tr');
-      const newIndex = rows.length;
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-        <td><input type="file" name="productos[${newIndex}][foto]" accept="image/*"></td>
-        <td>
-          <input type="text" name="objetos[${newIndex}][nombre]" required>
-          <input type="hidden" name="objetos[${newIndex}][id]" value="">
-        </td>
-        <td><input type="number" name="objetos[${newIndex}][cantidad]" required></td>
-        <td><input type="text" name="objetos[${newIndex}][descripcion]"></td>
-        <td><input type="number" step="0.01" name="objetos[${newIndex}][valor_esperado]"></td>
-        <td></td>
-      `;
-      productosBody.appendChild(newRow);
-    } else {
-      alert('No se pudo realizar la operación: ' + (json.error || 'error'));
-    }
-  })
-  .catch(err => {
-    alert('Error del servidor');
-    console.error(err);
-  });
-}
+  }
 
 </script>
