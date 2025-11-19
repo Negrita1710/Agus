@@ -34,10 +34,11 @@ if ($boletaentrada && $boletaentrada->getId()) {
       } ?>
     </h2>
     <div id="formboleta">
-      <input type="hidden" name="id" id="idboleta" value="<?php echo ($boletaentrada->getId()); ?>">
+
 
       <!-- Tabla de información -->
        <form id="tabla-infoboletaE" method="post">
+              <input type="hidden" name="id_boleta"  value="<?php echo ($boletaentrada->getId()); ?>">
       <table class="tabla-productos">
         <tr>
           <th>Moneda</th>
@@ -90,7 +91,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
       </tr>
     </thead>
     <tbody id="productos-body">
-         <?php if (empty($productos)): ?>
+      
         <tr>
           <td><input type="file" name="imagenes" accept="image/*"></td>
           <td>
@@ -104,28 +105,13 @@ if ($boletaentrada && $boletaentrada->getId()) {
           <td>
              <i title="Guardar cambios"onclick="guardarProducto()" class="fa-solid fa-floppy-disk"></i>
           </td>
-        </tr>
-      <?php else: ?>
-        <?php foreach ($productos as $index => $prod): ?>
-          <tr>
-            <td><input type="file" name="productos[<?php echo $index; ?>][foto]" accept="image/*"></td>
-            <td>
-              <input type="text" name="objetos[<?php echo $index; ?>][nombre]" value="<?php echo htmlspecialchars($prod['nombre']); ?>" required>
-              <input type="hidden" name="objetos[<?php echo $index; ?>][id]" value="<?php echo $prod['id']; ?>">
-            </td>
-            <td><input type="number" name="objetos[<?php echo $index; ?>][cantidad]" value="<?php echo htmlspecialchars($prod['cantidad']); ?>" required></td>
-            <td><input type="text" name="objetos[<?php echo $index; ?>][descripcion]" value="<?php echo htmlspecialchars($prod['descripcion']); ?>"></td>
-            <td><input type="number" step="0.01" name="objetos[<?php echo $index; ?>][valor_esperado]" value="<?php echo htmlspecialchars($prod['valor_esperado']); ?>"></td>
-          </tr>
-        <?php endforeach; ?>
-      <?php endif; ?>
-            
+        </tr>        
     </tbody>
   </table>
 </form>
-
-
-
+<?php
+    var_dump($id, $boletaentrada, $productos);
+?>
 <!-- cambie la logica, lo que preciso hacer ahora es hacer algo parecido a lo q habia antes, sobre que si no hay productos la tabla no tenga nd, etc. -->
    <table class="tabla-productos">
                     <tr>
@@ -133,12 +119,15 @@ if ($boletaentrada && $boletaentrada->getId()) {
                       <th>Cantidad</th>
                       <th>Descripcion</th>
                       <th>Valor esperado</th>
+                      <th>Acciones</th>
+
 
                     </tr>
                 <?php foreach ($productos as $producto): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($producto['nombre']); ?></td>
                         <td><?php echo htmlspecialchars($producto['cantidad']); ?></td>
+                        <td><?php echo htmlspecialchars($producto['descripcion']); ?></td>
                         <td><?php echo htmlspecialchars($producto['valor_esperado']); ?></td>
                         <td onclick="(<?php echo htmlspecialchars($producto['id']); ?>)">
                         <i title="editar" class="fa-solid fa-pencil"></i> </td>

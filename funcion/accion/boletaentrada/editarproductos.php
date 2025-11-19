@@ -7,10 +7,11 @@ header('Content-Type: application/json'); // siempre JSON
 
 try {
    $objeto = $_POST['objetos'] ??[];
+   $id_boleta = $_POST[''] ??[];
 
     // Capturar datos enviados
     $id         = $_POST['id'] ?? 0;
-    $id_boleta  = $_POST['id_boleta'] ?? '';
+    $id_boleta = $_POST['id_boleta'] ?? 0;
     $imagenes   = $_POST['imagenes'] ?? '';
     $nombre      = $_POST['nombre'] ?? '';
     $cantidad = $_POST['cantidad'] ?? '';
@@ -20,7 +21,7 @@ try {
 
    
         // Crear nueva boleta
-        $objeto = new Objetos($id_boleta, $cantidad, $nombre, $descripcion, $valor_esperado);
+        $objeto = new Objetos(0, $cantidad, $nombre, $descripcion, $valor_esperado);
         $objeto->guardar();
         
         var_dump($_POST, $_FILES);
