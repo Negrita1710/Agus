@@ -38,7 +38,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
 
       <!-- Tabla de información -->
        <form id="tabla-infoboletaE" method="post">
-              <input type="hidden" name="id_boleta"  value="<?php echo ($boletaentrada->getId()); ?>">
+
       <table class="tabla-productos">
         <tr>
           <th>Moneda</th>
@@ -79,6 +79,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
       <!-- Tabla de productos -->
       <h2>Productos</h2>
       <form id="form-productos" class="form-productos" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="id_boleta"  value="<?php echo ($boletaentrada->getId()); ?>">
   <table class="tabla-productos">
     <thead>
       <tr>

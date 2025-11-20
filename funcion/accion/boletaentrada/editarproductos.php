@@ -7,7 +7,7 @@ header('Content-Type: application/json'); // siempre JSON
 
 try {
    $objeto = $_POST['objetos'] ??[];
-   $id_boleta = $_POST[''] ??[];
+   $id_boleta = $_POST['id_boleta'] ??[];
 
     // Capturar datos enviados
     $id         = $_POST['id'] ?? 0;

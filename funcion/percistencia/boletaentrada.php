@@ -115,4 +115,5 @@ public static function buscarPor($valor = null) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC); 
 }
 }
+
 ?>
