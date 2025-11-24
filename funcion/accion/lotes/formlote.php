@@ -46,43 +46,45 @@
        }
        } ?>
      </h2>
-     
-       <input type="hidden" name="id" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
+      
+          <input type="hidden" name="id" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
 
-      <!-- Tabla de información -->
-           
-                    <div class="objetos-grid" id="objetos-grid">
-              <?php foreach ($objetos as $obj): 
-                $checked = in_array($obj['id'], (array)$lotes->getIdObjeto()) ? 'checked' : '';
-                
-              ?>
+          <!-- Tabla de información -->
               
-              
-                <label class="obj-card">
-                  <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>" <?php echo $checked; ?>>
-                  <div class="thumb"><img src="uploads/<?php echo $obj['id']; ?>.jpg" alt="Imagen del producto" alt="<?php echo htmlspecialchars($obj['nombre']); ?>"></div>
-                  <div class="meta">
-                    <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
-                    <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
-                  </div>
-                </label>
+              <div class="objetos-grid" id="objetos-grid" !important>
+                <?php foreach ($objetos as $obj): ?>
+                  <label class="obj-card">
+                    <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
+                    <div class="thumb">
+                    <?php
+                      if (!empty($obj['foto'])) {
+                        $mime = $obj['foto_mime'] ?? 'image/jpeg';
+                      $src = 'data:' . $mime . ';base64,' . base64_encode($obj['foto']);
+                      } elseif (!empty($obj['imagen'])) {
+                      $src = '../funcion/uploads/objetos/' . rawurlencode($obj['imagen']);
+                      } else {
+                      $src = '../funcion/img/placeholder.png';
+                      }
+                    ?>
+                    <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
+                    </div>
+                    <div class="meta">
+                      <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
+                        <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
+                    </div>
+                  </label>
+                <?php endforeach; ?>
+              </div>
                 
-              <?php endforeach; ?>
-        
-               </div>
-            
 
-            
- 
-            <p>Numero:</p>  
-            <input type="text" name="numero" id="numero" required value="<?php echo htmlspecialchars($lotes->getNumero()); ?>">
-            <p>Serie:</p>
-            <input type="text" name="serie" id="serie" required value="<?php echo htmlspecialchars($lotes->getSerie()); ?>">
-   
+                
     
+              <p>Numero:</p>  
+              <input type="text" name="numero" id="numero" required value="<?php echo htmlspecialchars($lotes->getNumero()); ?>">
+              <p>Serie:</p>
+              <input type="text" name="serie" id="serie" required value="<?php echo htmlspecialchars($lotes->getSerie()); ?>">
 
+       
       <div id="mensaje-remate" style="color:green;margin-top:8px;"></div>
-
       <button type="button" class="boton-guardar" onclick="ActualizarLote();">Guardar cambios</button>
-    </div>
-              
+  </div>

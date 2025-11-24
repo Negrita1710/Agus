@@ -430,33 +430,36 @@ tr:nth-child(even):hover {
   box-shadow: 0 0 5px rgba(35, 110, 67, 0.3);
 }
 .objetos-grid {
-  display: grid; /* usar grid en lugar de table-row */
-  width: 100%;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 12px;
-  align-items: start;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  display: grid !important;
+  width: 100% !important;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+  gap: 12px !important;
+  align-items: start !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  float: none !important;
 }
-
 /* ajustes responsivos */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .objetos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 8px;
   }
 }
 .obj-card {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   align-items: center;
   padding: 8px;
   border: 1px solid #e6efe6;
   border-radius: 8px;
-  background:#fff;
-  cursor:pointer;
-  user-select:none;
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box !important;
+  float: none !important;
+  width: auto !important;
 }
 .obj-card input[type="checkbox"] {
   display:none;

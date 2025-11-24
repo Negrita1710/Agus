@@ -11,7 +11,7 @@
         $id_cliente = $_POST['id_cliente'] ?? '';
     
 
-        $objetos = new Objetos($id, $moneda, $fecha, $id_cliente);
+        $objetos = new Objetos($id, $moneda, $fecha, $id_cliente, $valor_esperado);
 
         $objetos->guardar();
     }
@@ -25,7 +25,7 @@
 <body>
     <div id="inresultado">
     <h2>Formulario de producto</h2>
-    <form method="post" action="funcion/accion/boletaentrada/actualizarproducto.php">
+    <form method="post" action="funcion/accion/boletaentrada/actualizarboletadeentrada.php">
         <label for="nombre">ID:</label>
         <input type="text" name="nombre" id="nombre" required><br><br>
 

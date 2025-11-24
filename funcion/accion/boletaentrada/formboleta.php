@@ -78,8 +78,8 @@ if ($boletaentrada && $boletaentrada->getId()) {
 
       <!-- Tabla de productos -->
       <h2>Productos</h2>
-      <form id="form-productos" class="form-productos" method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="id_boleta"  value="<?php echo ($boletaentrada->getId()); ?>">
+        <form id="form-productos" class="form-productos" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id_boleta" value="<?php echo $boletaentrada->getId(); ?>">
   <table class="tabla-productos">
     <thead>
       <tr>
@@ -93,26 +93,22 @@ if ($boletaentrada && $boletaentrada->getId()) {
     </thead>
     <tbody id="productos-body">
       
-        <tr>
-          <td><input type="file" name="imagenes" accept="image/*"></td>
-          <td>
-            <input type="text" name="nombre" required>
-            <input type="hidden" name="id" value="">
-          </td>
-          <td><input type="number" name="cantidad" required></td>
-          <td><input type="text" name="descripcion"></td>
-          <td><input type="number" step="0.01" name="valor"></td>
-         
-          <td>
-             <i title="Guardar cambios"onclick="guardarProducto()" class="fa-solid fa-floppy-disk"></i>
-          </td>
-        </tr>        
-    </tbody>
-  </table>
-</form>
-<?php
-    var_dump($id, $boletaentrada, $productos);
-?>
+          <tr>
+            <td><input type="file" name="imagenes" accept="image/*"></td>
+            <td>
+              <input type="text" name="nombre" required>
+              <input type="hidden" name="id" value="">
+            </td>
+            <td><input type="number" name="cantidad" required></td>
+            <td><input type="text" name="descripcion"></td>
+            <td><input type="number" step="0.01" name="valor_esperado" required></td>
+            <td>
+              <i title="Guardar cambios" onclick="guardarProducto()" class="fa-solid fa-floppy-disk"></i>
+            </td>
+          </tr>
+        </table>
+      </form>
+
 <!-- cambie la logica, lo que preciso hacer ahora es hacer algo parecido a lo q habia antes, sobre que si no hay productos la tabla no tenga nd, etc. -->
    <table class="tabla-productos">
                     <tr>

@@ -2,40 +2,25 @@
 session_start();
 require_once '../../percistencia/objetos.php';
 
-header('Content-Type: application/json'); // siempre JSON
-
+header('Content-Type: application/json');
 
 try {
-   $objeto = $_POST['objetos'] ??[];
-   $id_boleta = $_POST['id_boleta'] ??[];
-
-    // Capturar datos enviados
-    $id         = $_POST['id'] ?? 0;
-    $id_boleta = $_POST['id_boleta'] ?? 0;
-    $imagenes   = $_POST['imagenes'] ?? '';
+    $id          = $_POST['id'] ?? 0;
+    $id_boleta   = $_POST['id_boleta'] ?? null;
     $nombre      = $_POST['nombre'] ?? '';
-    $cantidad = $_POST['cantidad'] ?? '';
+    $cantidad    = (int)($_POST['cantidad'] ?? 0);
     $descripcion = $_POST['descripcion'] ?? '';
-    $valor_esperado = $_POST['valor_esperado'] ?? '';
+    $valor_esperado = $_POST['valor_esperado'] ?? null;
 
-
-   
-        // Crear nueva boleta
-        $objeto = new Objetos(0, $cantidad, $nombre, $descripcion, $valor_esperado);
-        $objeto->guardar();
-        
-        var_dump($_POST, $_FILES);
-
-        if ($objeto->getId()) {
-            echo json_encode(['ok' => true, 'id' => $objeto->getId()]);
-            exit;
-        } else {
-            echo json_encode(['ok' => false, 'error' => 'Error al crear la boleta']);
-            exit;
-        }
+    if (!$id_boleta) {
+        throw new Exception("Falta id_boleta en el formulario");
     }
-    catch (Exception $e) {
-    echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
-    exit;
+
+    $objeto = new Objetos($id_boleta, $cantidad, $nombre, $descripcion, $valor_esperado, $id);
+    $objeto->guardar();
+
+    echo json_encode(['ok' => true, 'id' => $objeto->getId()]);
+} catch (Exception $e) {
+    echo json_encode(['ok' => false, 'error' => $e->getMessage(), 'post' => $_POST]);
 }
   

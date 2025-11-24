@@ -105,15 +105,13 @@ public static function buscarPor($valor = null) {
         $consulta->bindParam(1, $id);
         $consulta->execute();
     }
-    public static function obtenerProductosPorBoleta($id_boleta) {
-    $conexion = new Conexion(); 
-    $consulta = "SELECT id, nombre, cantidad, descripcion, valor_esperado 
-                 FROM objetos WHERE id_boleta = ?";
-    $stmt = $conexion->prepare($consulta);
-    $stmt->bindParam(1, $id_boleta, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        public static function obtenerProductosPorBoleta($id_boleta) {
+            $conexion = new Conexion(); 
+            $sql = "SELECT id, nombre, cantidad, descripcion, valor_esperado 
+                    FROM objetos WHERE id_boleta = ?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->execute([$id_boleta]); // ✅
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        }
 }
-}
-
 ?>
