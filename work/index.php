@@ -209,49 +209,12 @@ session_start();
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById('inresultado').innerHTML = this.responseText;
-                setupFormLote();
+                
             }
         };
         xhr.open('GET', '../funcion/accion/lotes/formlote.php?id_remate=' + id_remate, true);
         xhr.send();
 }
-
-function setupFormLote() {
-    document.getElementById('id_remate').addEventListener('change', function() {
-        var remateMoneda = this.options[this.selectedIndex].text.split(' ')[1]; // Assuming format "fecha moneda"
-        var objetoSelect = document.getElementById('id_objeto');
-        var options = objetoSelect.options;
-        for (var i = 0; i < options.length; i++) {
-            var option = options[i];
-            if (option.value === '') continue; // Skip empty option
-            var objetoMoneda = option.text.split('(')[1].split(')')[0]; // Extract moneda from "(moneda)"
-            if (objetoMoneda.toLowerCase() === remateMoneda.toLowerCase()) {
-                option.style.display = '';
-            } else {
-                option.style.display = 'none';
-            }
-        }
-        // Reset selection if current is hidden
-        var selectedOptions = [];
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].selected && options[i].style.display === 'none') {
-                options[i].selected = false;
-            } else if (options[i].selected) {
-                selectedOptions.push(options[i]);
-            }
-        }
-        // If no options selected, select the first visible one
-        if (selectedOptions.length === 0) {
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].value !== '' && options[i].style.display !== 'none') {
-                    options[i].selected = true;
-                    break;
-                }
-            }
-        }
-    });
-}
-
 function ActualizarLote() {
     const form = document.getElementById('form-lote');
     const msg = document.getElementById('mensaje-lote');
@@ -307,18 +270,18 @@ function listarlote() {
         xhr.open('GET', '../funcion/accion/remates/listaremate.php', true);
         xhr.send();
     };
-    // ...existing code...
-// delegación: evitar submit si no hay objetos seleccionados (si lo requerís)
-//estp sirve para mejorar la seleccion / validacion
-document.addEventListener('submit', function (e) {
-  if (!e.target || e.target.id !== 'form-lote') return;
-  // comprobá que haya al menos una casilla marcada
-  const checked = e.target.querySelectorAll('input[name="id_objeto[]"]:checked').length;
-  if (checked === 0) {
-    e.preventDefault();
-    const msg = document.getElementById('mensaje-remate') || document.getElementById('mensaje-lote');
-    if (msg) msg.textContent = 'Seleccioná al menos un objeto para el lote.';
-    return;
+   
+// delegación: evitar submit si no hay objetos seleccionados
+//estO sirve para mejorar la seleccion / validacion
+        document.addEventListener('submit', function (e) {
+        if (!e.target || e.target.id !== 'form-lote') return;
+            // comprobá que haya al menos una casilla marcada
+            const checked = e.target.querySelectorAll('input[name="id_objeto[]"]:checked').length;
+            if (checked === 0) {
+            e.preventDefault();
+            const msg = document.getElementById('mensaje-remate') || document.getElementById('mensaje-lote');
+        if (msg) msg.textContent = 'Seleccioná al menos un objeto para el lote.';
+        return;
   }
   // el resto del handler ya enviará FormData como lo tengas implementado
 });
@@ -367,7 +330,7 @@ document.addEventListener('submit', function (e) {
     data.append('moneda', document.getElementById('moneda').value);
     data.append('fecha', document.getElementById('fecha').value);
     data.append('id_cliente', document.getElementById('id_cliente').value);
-    data.append('id', document.getElementById('idboleta').value);
+
 
     alert('Guardando cambios...');
 

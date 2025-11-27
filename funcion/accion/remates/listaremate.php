@@ -18,7 +18,6 @@
         <input type="text" class="nav-barra" id="nombre" name="nombre" required>
         <button type="submit" name="boton" class="nav" id="boton" onclick="buscaremate()">Listar</button>
         <input type="button" id="agregar" class="boton" value="Agregar Remate" onclick="agregaremate()">
-        <i title="listar lote"class="fa-solid fa-arrow-rotate-left" onclick="listarlote()"></i>
         
       </div>
     </div>

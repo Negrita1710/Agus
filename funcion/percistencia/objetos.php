@@ -129,7 +129,8 @@ public static function borrarRegistro($id) {
 
     public static function recuperarTodosConMoneda() {
         $conexion = new Conexion();
-        $consulta = $conexion->prepare('SELECT o.*, b.moneda FROM ' . self::TABLA . ' o JOIN boleta_entrada b ON o.id_boleta = b.id WHERE LOWER(b.moneda) IN ("pesos", "usd")');
+        $consulta = $conexion->prepare('SELECT o.*, b.moneda FROM ' . self::TABLA . ' o JOIN boleta_entrada b ON o.id_boleta
+         = b.id WHERE LOWER(b.moneda) IN ("pesos", "usd")');
         $consulta->execute();
         return $consulta->fetchAll();
     }
