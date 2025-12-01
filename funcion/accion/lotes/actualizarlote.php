@@ -6,6 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once '../../percistencia/Conexion.php';
 require_once '../../percistencia/lote.php';
+require_once '../../percistencia/objetos.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -20,7 +21,7 @@ $serie = trim($_POST['serie'] ?? '');
 $id_objetos = isset($_POST['id_objeto']) ? (array) $_POST['id_objeto'] : [];
 
 try {
-    // Crear o actualizar lote usando la clase Lote
+    // Crear o actualizar lote
     if ($id > 0) {
         $lote = Lote::buscarPorId($id);
         if (!$lote) {
@@ -43,12 +44,10 @@ try {
     $db = new Conexion();
     $db->beginTransaction();
 
-    // Eliminar relaciones previas
     $del = $db->prepare('DELETE FROM lote_objetos WHERE id_lote = :id_lote');
     $del->bindValue(':id_lote', $loteId, PDO::PARAM_INT);
     $del->execute();
 
-    // Insertar seleccionados (si hay)
     if (!empty($id_objetos)) {
         $ins = $db->prepare('INSERT INTO lote_objetos (id_lote, id_objeto) VALUES (:id_lote, :id_objeto)');
         foreach ($id_objetos as $id_obj) {
@@ -58,9 +57,39 @@ try {
         }
     }
 
+    // Procesar imágenes subidas
+    if (!empty($_FILES['foto_objeto'])) {
+        foreach ($_FILES['foto_objeto']['tmp_name'] as $id_obj => $tmp_names) {
+            foreach ($tmp_names as $index => $tmp_name) {
+                if ($_FILES['foto_objeto']['error'][$id_obj][$index] === UPLOAD_ERR_OK) {
+                    // Obtener el nombre del objeto
+                    $objeto = Objetos::buscarPorId($id_obj);
+                    if ($objeto) {
+                        $nombre = preg_replace('/[^a-zA-Z0-9_-]/', '', strtolower($objeto->getNombre()));
+                        // Generar nombre: timestamp_nombre.jpeg
+                        $nombre_archivo = time() . '_' . $nombre . '.jpeg';
+                        $ruta_destino = __DIR__ . "/../boletaentrada/uploads/" . $nombre_archivo;
+
+                        if (move_uploaded_file($tmp_name, $ruta_destino)) {
+                            $sqlImg = "UPDATE objetos SET foto = :nombre_archivo WHERE id = :objeto_id";
+                            $stmtImg = $db->prepare($sqlImg);
+                            $stmtImg->bindValue(':objeto_id', intval($id_obj), PDO::PARAM_INT);
+                            $stmtImg->bindValue(':nombre_archivo', $nombre_archivo, PDO::PARAM_STR);
+                            if (!$stmtImg->execute()) {
+                                error_log("Error updating foto for object $id_obj: " . print_r($stmtImg->errorInfo(), true));
+                            }
+                        } else {
+                            error_log("Error moving uploaded file for object $id_obj");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     $db->commit();
 
-    echo json_encode(['ok' => true, 'id' => $loteId, 'message' => 'Lote guardado correctamente.']);
+    echo json_encode(['ok' => true, 'id' => $loteId, 'message' => 'Lote guardado correctamente con imágenes.']);
     exit;
 } catch (Exception $e) {
     if (isset($db) && $db->inTransaction()) $db->rollBack();

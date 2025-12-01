@@ -42,35 +42,32 @@
   </h2>
 
   <!-- FORM: id importante para que el JS lo capture -->
-  <form id="form-lote" action="../funcion/accion/lotes/actualizarlote.php" method="post">
+  <form id="form-lote" action="../funcion/accion/lotes/actualizarlote.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_remate" value="<?php echo htmlspecialchars($id_remate); ?>">
 
-    <div class="objetos-grid" id="objetos-grid">
-      <?php foreach ($objetos as $obj): ?>
-        <label class="obj-card">
-          <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
-          <div class="thumb">
-            <?php
-         
-              if (!empty($obj['foto'])) {
-                
-                $src = './../funcion/accion/boletaentrada/uploads/' .$obj['foto'];
-              }
-             
-              elseif (!empty($obj['foto'])) {
-              $src = './../funcion/uploads/placeholder.png';
-              }
-            ?>
-            <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
-          </div>
-          <div class="meta">
-            <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
-            <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
-          </div>
-        </label>
-      <?php endforeach; ?>
-    </div>
+      <div class="objetos-grid" id="objetos-grid">
+        <?php foreach ($objetos as $obj): ?>
+          <label class="obj-card">
+            <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
+            <div class="thumb">
+              <?php
+                $src = !empty($obj['foto'])
+                  ? './../funcion/accion/boletaentrada/uploads/' .$obj['foto']
+                  : './../funcion/accion/boletaentrada/uploads/default.png';
+              ?>
+              <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
+            </div>
+            <div class="meta">
+              <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
+              <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
+            </div>
+            <input type="file" name="foto_objeto[<?php echo $obj['id']; ?>][]" accept="image/*">
+            
+          </label>
+        <?php endforeach; ?>
+      </div>
+
 
     <p>Numero:</p>
     <input type="text" name="numero" id="numero" required value="<?php echo htmlspecialchars($lotes->getNumero()); ?>">

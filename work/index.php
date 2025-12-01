@@ -271,8 +271,8 @@ function listarlote() {
         xhr.send();
     };
    
-// delegación: evitar submit si no hay objetos seleccionados
-//estO sirve para mejorar la seleccion / validacion
+            // delegación: evitar submit si no hay objetos seleccionados
+            //estO sirve para mejorar la seleccion / validacion
         document.addEventListener('submit', function (e) {
         if (!e.target || e.target.id !== 'form-lote') return;
             // comprobá que haya al menos una casilla marcada
@@ -370,6 +370,5 @@ function guardarProducto(){
     body: data,
     cache: 'no-store'
   })
-  }
-
+  }    
 </script>

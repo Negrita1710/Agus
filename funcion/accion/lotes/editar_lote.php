@@ -96,12 +96,12 @@ if ($boletaentrada && $boletaentrada->getId()) {
           <tr>
             <td><input type="file" name="imagenes" accept="image/*"></td>
             <td>
-              <input type="text" name="nombre" required>
+              <input type="text" name="nombre" required value="<?php echo $objeto->getNombre(); ?>">
               <input type="hidden" name="id" value="">
             </td>
-            <td><input type="number" name="cantidad" required></td>
-            <td><input type="text" name="descripcion"></td>
-            <td><input type="number" step="0.01" name="valor_esperado" required></td>
+            <td><input type="number" name="cantidad" required value="<?php echo $objeto->getCantidad(); ?>"></td>
+            <td><input type="text" name="descripcion" value="<?php echo $objeto->getDescripcion(); ?>" ></td>
+            <td><input type="number" step="0.01" name="valor_esperado" required value="<?php echo $objeto->getValorEsperado();?>"></td>
             <td>
               <i title="Guardar cambios" onclick="guardarProducto()" class="fa-solid fa-floppy-disk"></i>
             </td>
@@ -127,7 +127,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
                         <td><?php echo htmlspecialchars($producto['descripcion']); ?></td>
                         <td><?php echo htmlspecialchars($producto['valor_esperado']); ?></td>
                         <td onclick="(<?php echo htmlspecialchars($producto['id']); ?>)">
-                        <i title="editar"  onclick="editarobjeto()" class="fa-solid fa-pencil"></i> </td>
+                        <i title="editar" class="fa-solid fa-pencil" ></i> </td>
                         
                     </tr>
                 <?php endforeach; ?>
@@ -137,18 +137,3 @@ if ($boletaentrada && $boletaentrada->getId()) {
   </div>
 
 </html>
-<script>
-  function editrarobjeto(id) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById('inresultado').innerHTML = this.responseText;
-            
-
-        }
-    };
-     xhr.open('GET', '../funcion/accion/lotes/editar_lote.php?id=' + id, true);
-        xhr.send();
-}
-
-</script>
