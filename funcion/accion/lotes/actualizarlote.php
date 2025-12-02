@@ -58,43 +58,39 @@ try {
     }
 
     // Procesar imágenes subidas
-    if (!empty($_FILES['foto_objeto'])) {
-        foreach ($_FILES['foto_objeto']['tmp_name'] as $id_obj => $tmp_names) {
-            foreach ($tmp_names as $index => $tmp_name) {
-                if ($_FILES['foto_objeto']['error'][$id_obj][$index] === UPLOAD_ERR_OK) {
-                    // Obtener el nombre del objeto
-                    $objeto = Objetos::buscarPorId($id_obj);
-                    if ($objeto) {
-                        $nombre = preg_replace('/[^a-zA-Z0-9_-]/', '', strtolower($objeto->getNombre()));
-                        // Generar nombre: timestamp_nombre.jpeg
-                        $nombre_archivo = time() . '_' . $nombre . '.jpeg';
-                        $ruta_destino = __DIR__ . "/../boletaentrada/uploads/" . $nombre_archivo;
+    if (!empty($_FILES['foto'])) {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+            $foto = $_POST ['foto'];
+            $nombre_archivo = ['foto']['name'];
+            $archivo = $_FILES['foto']['tmp_name'];
 
-                        if (move_uploaded_file($tmp_name, $ruta_destino)) {
-                            $sqlImg = "UPDATE objetos SET foto = :nombre_archivo WHERE id = :objeto_id";
-                            $stmtImg = $db->prepare($sqlImg);
-                            $stmtImg->bindValue(':objeto_id', intval($id_obj), PDO::PARAM_INT);
-                            $stmtImg->bindValue(':nombre_archivo', $nombre_archivo, PDO::PARAM_STR);
-                            if (!$stmtImg->execute()) {
-                                error_log("Error updating foto for object $id_obj: " . print_r($stmtImg->errorInfo(), true));
-                            }
-                        } else {
-                            error_log("Error moving uploaded file for object $id_obj");
-                        }
-                    }
-                }
+            $ruta_destino = "../boletaentrada/uploads/" . $nombre_archivo;
+            $base_datos = "uploads/" . $nombre_archivo;
+
+            move_uploaded_file($archivo, $ruta_destino);
+
+            $instertar = "INSERT INTO objetos (foto) VALUES ('$base_datos')";
+
+            if (mysqli_query($conexion, $instertar)) {
+                echo "Imagen subida y ruta guardada en la base de datos correctamente.";
+            } else {
+                echo "Error al guardar la ruta en la base de datos: " . mysqli_error($conexion);
             }
-        }
+        
+}  
     }
 
     $db->commit();
 
-    echo json_encode(['ok' => true, 'id' => $loteId, 'message' => 'Lote guardado correctamente con imágenes.']);
-    exit;
+    echo json_encode(['ok' => true, 'lote_id' => $loteId]);
 } catch (Exception $e) {
-    if (isset($db) && $db->inTransaction()) $db->rollBack();
+    if (isset($db)) {
+        $db->rollBack();
+    }
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
-    exit;
+    echo json_encode(['ok' => false, 'error' => 'Error al actualizar el lote: ' . $e->getMessage()]);
 }
+
+
 ?>

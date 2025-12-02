@@ -48,21 +48,17 @@
 
       <div class="objetos-grid" id="objetos-grid">
         <?php foreach ($objetos as $obj): ?>
+          
           <label class="obj-card">
-            <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
+            <input type="checkbox" name="foto" value="<?php echo $obj['id']; ?>">
             <div class="thumb">
-              <?php
-                $src = !empty($obj['foto'])
-                  ? './../funcion/accion/boletaentrada/uploads/' .$obj['foto']
-                  : './../funcion/accion/boletaentrada/uploads/default.png';
-              ?>
               <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
             </div>
             <div class="meta">
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
               <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
             </div>
-            <input type="file" name="foto_objeto[<?php echo $obj['id']; ?>][]" accept="image/*">
+           
             
           </label>
         <?php endforeach; ?>
