@@ -354,21 +354,19 @@ function listarlote() {
     });
 }
 function guardarProducto(){
-  const form = document.getElementById('form-productos');
-  const productosBody = document.getElementById('productos-body');
-  console.log("form:", form);
-  console.log("productosBody:", productosBody);
-  if (!form || !productosBody) {
-  console.error("No se encontró el form o el tbody");
-   return;
-  }
-    const data = new FormData(form);
-    alert('Guardando cambios...');
+  const form = document.getElementById('uploadform').addEventListener('submit', function(e){
+    e.preventDefault();
+    let files = document.getElementById('foto').files;
+    let formData = new FormData();
 
-    fetch('../funcion/accion/boletaentrada/editarproductos.php', {
-    method: 'POST',
-    body: data,
-    cache: 'no-store'
-  })
+    for (let i = 0; i < files.length; i++) {
+      formData.append('foto[]', files[i]);
+    }
+    fetch('../funcion/accion/boletaentrada/actualizarlote.php', {
+      method: 'POST',
+      body: formData
+    })
+  });
+    alert('Guardando cambios...');
   }    
 </script>

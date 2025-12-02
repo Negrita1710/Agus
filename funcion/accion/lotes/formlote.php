@@ -52,7 +52,7 @@
           <label class="obj-card">
             <input type="checkbox" name="foto" value="<?php echo $obj['id']; ?>">
             <div class="thumb">
-              <img src="<?php echo htmlspecialchars($src); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
+              <img src="<?php echo htmlspecialchars($src ); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
             </div>
             <div class="meta">
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>

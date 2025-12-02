@@ -78,7 +78,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
 
       <!-- Tabla de productos -->
       <h2>Productos</h2>
-        <form id="form-productos" class="form-productos" method="POST" enctype="multipart/form-data">
+        <form  id="uploadform" enctype="multipart/form-data">
         <input type="hidden" name="id_boleta" value="<?php echo $boletaentrada->getId(); ?>">
   <table class="tabla-productos">
     <thead>
@@ -94,7 +94,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
     <tbody id="productos-body">
       
           <tr>
-            <td><input type="file" name="imagenes" accept="image/*"></td>
+            <td><input type="file" name="foto" accept="image/*"></td>
             <td>
               <input type="text" name="nombre" required>
               <input type="hidden" name="id" value="">
@@ -103,7 +103,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
             <td><input type="text" name="descripcion"></td>
             <td><input type="number" step="0.01" name="valor_esperado" required></td>
             <td>
-              <i title="Guardar cambios" onclick="guardarProducto()" class="fa-solid fa-floppy-disk"></i>
+              <button type="submit">Guardar</button>
             </td>
           </tr>
         </table>

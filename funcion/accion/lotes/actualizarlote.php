@@ -57,9 +57,30 @@ try {
         }
     }
 
+    try {
+    // Crear o actualizar objetos
+    if ($id > 0) {
+        $objeto = Objetos::buscarPorId($id);
+        if (!$objeto) {
+            http_response_code(404);
+            echo json_encode(['ok' => false, 'error' => 'Lote no encontrado']);
+            exit;
+        }
+        $objeto->setIdBoleta($id_boleta);
+        $objeto->setCantidad($cantidad);
+        $objeto->setNombre($nombre);
+        $objeto->setDescripcion($descripcion);
+        $objeto->setValorEsperado($valor_esperado);
+        $objeto->guardar();
+        $objetoId = $objeto->getId();
+    } else {
+        $objeto = new Objetos($cantidad, $nombre, $descripcion, $valor_esperado, null);
+        $objeto->guardar();
+        $objetoId = $objeto->getId();
+    }
+    }
     // Procesar imágenes subidas
     if (!empty($_FILES['foto'])) {
-                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
             $foto = $_POST ['foto'];
             $nombre_archivo = ['foto']['name'];
@@ -78,7 +99,7 @@ try {
                 echo "Error al guardar la ruta en la base de datos: " . mysqli_error($conexion);
             }
         
-}  
+
     }
 
     $db->commit();
@@ -91,6 +112,4 @@ try {
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => 'Error al actualizar el lote: ' . $e->getMessage()]);
 }
-
-
 ?>
