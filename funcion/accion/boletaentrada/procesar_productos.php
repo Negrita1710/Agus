@@ -32,7 +32,7 @@ if (!empty($_FILES['foto']['name'])) {
     $target_file = $upload_dir . $file_name;
 
     if (move_uploaded_file($_FILES['foto']['tmp_name'], $target_file)) {
-        $foto_path = 'uploads/' . $file_name;
+        $foto_path = '' . $file_name;
     } else {
         echo json_encode(['ok' => false, 'error' => 'Error al subir la imagen']);
         exit;

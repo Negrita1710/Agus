@@ -49,16 +49,27 @@
 
       <div class="objetos-grid" id="objetos-grid">
         <?php foreach ($objetos as $obj): ?>
-          <?php $src = !empty($obj['foto']) ? '/funcion/accion/boletaentrada/uploads/' . htmlspecialchars($obj['foto']) : $placeholder; ?>
+          <?php
+            $foto = htmlspecialchars($obj['foto']);
+            if (!empty($foto)) {
+              // Remove 'uploads/' prefix if present to avoid double path
+              $foto = str_replace('uploads/', '', $foto);
+              $src = '/funcion/accion/boletaentrada/uploads/' . $foto;
+            } else {
+              $src = $placeholder;
+            }
+          ?>
           <!-- Debug: <?php echo 'Foto: ' . htmlspecialchars($obj['foto']) . ' | Src: ' . $src; ?> -->
           <label class="obj-card">
             <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
+          
             <div class="thumb">
               <img src="<?php echo $src; ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
             </div>
             <div class="meta">
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
               <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
+                <input type="file" name="foto" accept="image/*">
             </div>
 
 
