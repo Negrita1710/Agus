@@ -8,6 +8,11 @@ require_once '../../percistencia/Conexion.php';
 require_once '../../percistencia/lote.php';
 require_once '../../percistencia/objetos.php';
 
+
+
+
+
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'Method not allowed']);
@@ -57,50 +62,8 @@ try {
         }
     }
 
-    try {
-    // Crear o actualizar objetos
-    if ($id > 0) {
-        $objeto = Objetos::buscarPorId($id);
-        if (!$objeto) {
-            http_response_code(404);
-            echo json_encode(['ok' => false, 'error' => 'Lote no encontrado']);
-            exit;
-        }
-        $objeto->setIdBoleta($id_boleta);
-        $objeto->setCantidad($cantidad);
-        $objeto->setNombre($nombre);
-        $objeto->setDescripcion($descripcion);
-        $objeto->setValorEsperado($valor_esperado);
-        $objeto->guardar();
-        $objetoId = $objeto->getId();
-    } else {
-        $objeto = new Objetos($cantidad, $nombre, $descripcion, $valor_esperado, null);
-        $objeto->guardar();
-        $objetoId = $objeto->getId();
-    }
-    }
-    // Procesar imágenes subidas
-    if (!empty($_FILES['foto'])) {
-        
-            $foto = $_POST ['foto'];
-            $nombre_archivo = ['foto']['name'];
-            $archivo = $_FILES['foto']['tmp_name'];
 
-            $ruta_destino = "../boletaentrada/uploads/" . $nombre_archivo;
-            $base_datos = "uploads/" . $nombre_archivo;
 
-            move_uploaded_file($archivo, $ruta_destino);
-
-            $instertar = "INSERT INTO objetos (foto) VALUES ('$base_datos')";
-
-            if (mysqli_query($conexion, $instertar)) {
-                echo "Imagen subida y ruta guardada en la base de datos correctamente.";
-            } else {
-                echo "Error al guardar la ruta en la base de datos: " . mysqli_error($conexion);
-            }
-        
-
-    }
 
     $db->commit();
 

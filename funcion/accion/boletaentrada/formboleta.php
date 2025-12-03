@@ -78,7 +78,7 @@ if ($boletaentrada && $boletaentrada->getId()) {
 
       <!-- Tabla de productos -->
       <h2>Productos</h2>
-        <form  id="uploadform" enctype="multipart/form-data">
+        <form  id="uploadform" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_boleta" value="<?php echo $boletaentrada->getId(); ?>">
   <table class="tabla-productos">
     <thead>

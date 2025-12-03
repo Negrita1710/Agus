@@ -128,12 +128,54 @@ session_start();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById('inresultado').innerHTML = this.responseText;
-            
+
+            // Attach event listener for product form
+            const form = document.getElementById('uploadform');
+            if (form) {
+                form.addEventListener('submit', function(e){
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+
+                    // Get boleta data if id_boleta is 0
+                    const idBoletaInput = document.querySelector('input[name="id_boleta"]');
+                    const idBoleta = idBoletaInput ? idBoletaInput.value : 0;
+                    formData.append('id_boleta', idBoleta);
+
+                    if (idBoleta == 0) {
+                        // Add boleta data
+                        const moneda = document.getElementById('moneda').value;
+                        const fecha = document.getElementById('fecha').value;
+                        const id_cliente = document.getElementById('id_cliente').value;
+                        formData.append('moneda', moneda);
+                        formData.append('fecha', fecha);
+                        formData.append('id_cliente', id_cliente);
+                    }
+
+                    fetch('../funcion/accion/boletaentrada/procesar_productos.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(resp => resp.json())
+                    .then(json => {
+                        if (json.ok) {
+                            alert('Producto guardado exitosamente');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (json.error || 'Error desconocido'));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Error al guardar el producto');
+                    });
+                });
+            }
 
         }
     };
-     xhr.open('GET', '../funcion/accion/boletaentrada/formboleta.php?id=' + id, true);
-        xhr.send();
+    xhr.open('GET', '../funcion/accion/boletaentrada/formboleta.php?id=' + id, true);
+    xhr.send();
 }
     document.getElementById('rem').addEventListener('click', function() {
         
@@ -353,20 +395,37 @@ function listarlote() {
         alert('Error al guardar la boleta');
     });
 }
-function guardarProducto(){
-  const form = document.getElementById('uploadform').addEventListener('submit', function(e){
-    e.preventDefault();
-    let files = document.getElementById('foto').files;
-    let formData = new FormData();
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('uploadform');
+    if (form) {
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append('foto[]', files[i]);
+            const formData = new FormData(form);
+
+            if (!formData.has('id_boleta')) {
+                const idBoleta = document.querySelector('input[name="id_boleta"]')?.value || 0;
+                formData.append('id_boleta', idBoleta);
+            }
+
+            fetch('../funcion/accion/boletaentrada/procesar_productos.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(resp => resp.json())
+            .then(json => {
+                if (json.ok) {
+                    alert('Producto guardado exitosamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (json.error || 'Error desconocido'));
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Error al guardar el producto');
+            });
+        });
     }
-    fetch('../funcion/accion/boletaentrada/actualizarlote.php', {
-      method: 'POST',
-      body: formData
-    })
-  });
-    alert('Guardando cambios...');
-  }    
+});
 </script>

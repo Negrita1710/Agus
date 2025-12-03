@@ -21,6 +21,7 @@
         }
     }
     $disponibles = Lote::recuperarDisponibles();
+    $placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2NjYyIvPjwvc3ZnPg==';
 ?>
 <div class="form-agregar">
   <h2>
@@ -48,18 +49,19 @@
 
       <div class="objetos-grid" id="objetos-grid">
         <?php foreach ($objetos as $obj): ?>
-          
+          <?php $src = !empty($obj['foto']) ? '/funcion/accion/boletaentrada/uploads/' . htmlspecialchars($obj['foto']) : $placeholder; ?>
+          <!-- Debug: <?php echo 'Foto: ' . htmlspecialchars($obj['foto']) . ' | Src: ' . $src; ?> -->
           <label class="obj-card">
-            <input type="checkbox" name="foto" value="<?php echo $obj['id']; ?>">
+            <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
             <div class="thumb">
-              <img src="<?php echo htmlspecialchars($src ); ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
+              <img src="<?php echo $src; ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
             </div>
             <div class="meta">
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
               <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
             </div>
-           
-            
+
+
           </label>
         <?php endforeach; ?>
       </div>

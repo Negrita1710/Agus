@@ -1,41 +1,50 @@
 <?php
-require_once ' ../../percistencia/objetos.php';
+session_start();
+require_once '../../percistencia/objetos.php';
+
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['ok' => false, 'error' => 'Método no permitido']);
+    exit;
+}
+
+$id_boleta = intval($_POST['id_boleta'] ?? 0);
+$nombre = trim($_POST['nombre'] ?? '');
+$cantidad = intval($_POST['cantidad'] ?? 0);
+$descripcion = trim($_POST['descripcion'] ?? '');
+$valor_esperado = floatval($_POST['valor_esperado'] ?? 0);
+
+if (!$id_boleta || !$nombre || !$cantidad || !$valor_esperado) {
+    echo json_encode(['ok' => false, 'error' => 'Datos incompletos']);
+    exit;
+}
+
+$foto_path = '';
+
+if (!empty($_FILES['foto']['name'])) {
+    $upload_dir = __DIR__ . '/uploads/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    $file_name = time() . '_' . basename($_FILES['foto']['name']);
+    $target_file = $upload_dir . $file_name;
+
+    if (move_uploaded_file($_FILES['foto']['tmp_name'], $target_file)) {
+        $foto_path = 'uploads/' . $file_name;
+    } else {
+        echo json_encode(['ok' => false, 'error' => 'Error al subir la imagen']);
+        exit;
+    }
+}
+
+try {
+    $objeto = new Objetos($id_boleta, $cantidad, $nombre, $descripcion, $valor_esperado, null, '', '', $foto_path);
+    $objeto->guardar();
+
+    echo json_encode(['ok' => true, 'id' => $objeto->getId()]);
+} catch (Exception $e) {
+    echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+}
 ?>
-
-         
-            
-            <body>
-            <div class="form-agregar">
-        <div id="inresultado">
-            <h2>Editar producto</h2>
-                <form method="post" action="../funcion/accion/clientes/editarproductos.php" class="form-cliente">
-                <input type="hidden" name="id" value="<?php echo htmlspecialchars($producto->getId()); ?>">
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" name="nombre" id="nombre" required value="<?php echo htmlspecialchars($producto->getNombre()); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="cantidad">Cantidad:</label>
-                        <input type="text" name="cantidad" id="cantidad" required value="<?php echo htmlspecialchars($producto->getCantidad()); ?>">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="direccion">Descripción:</label>
-                        <input type="text" name="direccion" id="direccion" required value="<?php echo htmlspecialchars($producto->getDescripcion()); ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="valor_esperado">Valor esperado:</label>
-                        <input type="text" name="telefono" id="valor_esperado" required value="<?php echo htmlspecialchars($producto->getValorEsperado()); ?>">
-                    </div>
-                </div>
-
-                
-
-                 <button type="submit" class="boton-guardar">Guardar cambios</button>
-                </form>
-        </div>    
-        </body>

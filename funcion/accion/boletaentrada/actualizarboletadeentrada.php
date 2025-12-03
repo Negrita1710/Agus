@@ -37,6 +37,30 @@ try {
         $boletaentrada->guardar();
 
         if ($boletaentrada->getId()) {
+            // Si hay datos de producto, guardarlos
+            if (isset($_POST['nombre']) && isset($_POST['cantidad']) && isset($_POST['descripcion']) && isset($_POST['valor_esperado'])) {
+                require_once '../../percistencia/objetos.php';
+                $objeto = new Objetos(
+                    $boletaentrada->getId(), // id_boleta
+                    $_POST['cantidad'],
+                    $_POST['nombre'],
+                    $_POST['descripcion'],
+                    $_POST['valor_esperado']
+                );
+                // Manejar la imagen si se subió
+                if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
+                    $uploadDir = __DIR__ . '/uploads/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+                    $foto = time() . '_' . basename($_FILES['foto']['name']);
+                    $uploadFile = $uploadDir . $foto;
+                    if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadFile)) {
+                        $objeto->setFoto($foto);
+                    }
+                }
+                $objeto->guardar();
+            }
             echo json_encode(['ok' => true, 'id' => $boletaentrada->getId()]);
             exit;
         } else {
