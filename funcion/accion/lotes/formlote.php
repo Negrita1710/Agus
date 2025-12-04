@@ -44,7 +44,7 @@
 
   <!-- FORM: id importante para que el JS lo capture -->
   <form id="form-lote" action="../funcion/accion/lotes/actualizarlote.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
+    <input type="hidden" name="id_lote" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_remate" value="<?php echo htmlspecialchars($id_remate); ?>">
 
       <div class="objetos-grid" id="objetos-grid">
@@ -69,7 +69,8 @@
             <div class="meta">
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
               <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
-                <input type="file" name="foto[]"  multiple>
+                <input type="file" name="foto[]"  multiple onchange="previewImages(event)">
+                <div id="preview"></div>
             </div>
 
 
@@ -87,4 +88,7 @@
     <!-- submit normal: tu JS debe interceptar el submit del form-lote -->
     <button type="submit" class="boton-guardar">Guardar cambios</button>
   </form>
+
 </div>
+
+

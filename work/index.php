@@ -428,4 +428,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function previewImages(event) {
+    const preview = document.getElementById('preview');
+    preview.innerHTML = '';
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML += `
+              <div style="margin:10px; display:inline-block;">
+                <img src="${e.target.result}" width="100"><br>
+                <label>
+                  <input type="radio" name="prioridad" value="${i}">
+                  Marcar como prioritaria
+                </label>
+              </div>
+            `;
+        }
+        reader.readAsDataURL(files[i]);
+    }
+}
 </script>
