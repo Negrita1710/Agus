@@ -69,7 +69,7 @@
             <div class="meta">
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
               <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
-                <input type="file" name="foto" accept="image/*">
+                <input type="file" name="foto[]"  multiple>
             </div>
 
 
