@@ -21,6 +21,7 @@
         }
     }
     $disponibles = Lote::recuperarDisponibles();
+    //esto es el placeholder gris para las imagenes que no tienen foto
     $placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2NjYyIvPjwvc3ZnPg==';
 ?>
 <div class="form-agregar">
@@ -70,25 +71,31 @@
               <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
               <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
                 <input type="file" name="foto[]"  multiple onchange="previewImages(event)">
-                <div id="preview"></div>
+                
             </div>
 
 
           </label>
         <?php endforeach; ?>
       </div>
+     
+               
+      <div id="preview"></div>
 
 
+    <div class="lote">
     <p>Numero:</p>
     <input type="text" name="numero" id="numero" required value="<?php echo htmlspecialchars($lotes->getNumero()); ?>">
     <p>Serie:</p>
     <input type="text" name="serie" id="serie" required value="<?php echo htmlspecialchars($lotes->getSerie()); ?>">
 
+     </div>
+
     <div id="mensaje-remate" style="color:green;margin-top:8px;"></div>
     <!-- submit normal: tu JS debe interceptar el submit del form-lote -->
     <button type="submit" class="boton-guardar">Guardar cambios</button>
-  </form>
-
+    </form>
+ 
 </div>
 
-
+ <!-- mas adelante tengo que ver si los clientes pueden ver las imagenes que se priorizaron  -->

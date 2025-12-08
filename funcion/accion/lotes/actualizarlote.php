@@ -84,14 +84,18 @@ try {
         }
     }
 
+   
     $db->commit();
 
-    echo json_encode(['ok' => true, 'lote_id' => $loteId]);
+    // Redirigir al index si todo salió bien
+    header("Location: ../../index.php?success=1");
+    exit;
 } catch (Exception $e) {
     if (isset($db)) {
         $db->rollBack();
     }
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Error al actualizar el lote: ' . $e->getMessage()]);
+    // Redirigir al index con un flag de error
+    header("Location: ../../index.php?error=1");
+    exit;
 }
 ?>
