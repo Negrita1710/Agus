@@ -45,8 +45,10 @@
 
   <!-- FORM: id importante para que el JS lo capture -->
   <form id="form-lote" action="../funcion/accion/lotes/actualizarlote.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_lote" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_remate" value="<?php echo htmlspecialchars($id_remate); ?>">
+    <input type="file" name="foto[]" multiple>
 
       <div class="objetos-grid" id="objetos-grid">
         <?php foreach ($objetos as $obj): ?>
@@ -54,7 +56,7 @@
             $foto = htmlspecialchars($obj['foto']);
             if (!empty($foto)) {
               // Remove 'uploads/' prefix if present to avoid double path
-              $foto = str_replace('uploads/', '', $foto);
+              $foto = str_replace('boletaentrada/uploads/', '', $foto);
               $src = '/funcion/accion/boletaentrada/uploads/' . $foto;
             } else {
               $src = $placeholder;
