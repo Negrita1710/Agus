@@ -3,6 +3,9 @@
     require_once '../../percistencia/lote.php';
     require_once '../../percistencia/remates.php';
     require_once '../../percistencia/objetos.php';
+    require_once '../../percistencia/imagenes.php';
+
+     // Obtener el ID del lote desde la URL
     $id = $_GET['id'] ?? null;
     $id_remate = $_GET['id_remate'] ?? null;
     $lotes = Lote::buscarPorId($id);
@@ -11,6 +14,7 @@
     }
     $remates = Remates::recuperarTodos();
     $objetos = Objetos::recuperarTodosConMoneda();
+    $imagenes_lote = Imagenes::recuperarPorLote($lotes->getId());  
     $remate_actual = null;
     if ($id_remate) {
         foreach ($remates as $rem) {
@@ -48,41 +52,58 @@
     <input type="hidden" name="id" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_lote" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_remate" value="<?php echo htmlspecialchars($id_remate); ?>">
-    <input type="file" name="foto[]" multiple>
-
-      <div class="objetos-grid" id="objetos-grid">
-        <?php foreach ($objetos as $obj): ?>
-          <?php
-            $foto = htmlspecialchars($obj['foto']);
-            if (!empty($foto)) {
-              // Remove 'uploads/' prefix if present to avoid double path
-              $foto = str_replace('boletaentrada/uploads/', '', $foto);
-              $src = '/funcion/accion/boletaentrada/uploads/' . $foto;
-            } else {
-              $src = $placeholder;
-            }
-          ?>
-          <!-- Debug: <?php echo 'Foto: ' . htmlspecialchars($obj['foto']) . ' | Src: ' . $src; ?> -->
+    
+    <div class="objetos-grid" id="objetos-grid">
+  <?php foreach ($objetos as $obj): ?>
+    <?php
+      $foto = htmlspecialchars($obj['foto']);
+      if (!empty($foto)) {
+        // Remover 'uploads/' si está presente para evitar doble path
+        $foto = str_replace('uploads/', '', $foto);
+        $src = '/funcion/accion/boletaentrada/uploads/' . $foto;
+      } else {
+        $src = $placeholder;
+      }
+      ?>
           <label class="obj-card">
-            <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
-          
-            <div class="thumb">
-              <img src="<?php echo $src; ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
-            </div>
-            <div class="meta">
-              <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
-              <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
-                <input type="file" name="foto[]"  multiple onchange="previewImages(event)">
-                
-            </div>
-
-
-          </label>
-        <?php endforeach; ?>
+      <input type="checkbox" name="id_objeto[]" value="<?php echo $obj['id']; ?>">
+      <div class="thumb">
+        <img src="<?php echo $src; ?>" alt="<?php echo htmlspecialchars($obj['nombre']); ?>" width="100" height="100">
       </div>
-     
-               
-      <div id="preview"></div>
+      <div class="meta">
+        <div class="nombre"><?php echo htmlspecialchars($obj['nombre']); ?></div>
+        <div class="moneda"><?php echo htmlspecialchars($obj['moneda']); ?></div>
+        <input type="file" name="foto[]" multiple onchange="previewImages(event)">
+      </div>
+    </label>
+  <?php endforeach; ?>
+</div>
+<!-- NUEVO: Mostrar imágenes subidas para este lote -->
+<div class="imagenes-lote-grid" id="imagenes-lote-grid">
+  <h3>Imágenes Subidas para este Lote</h3>
+  <?php if (!empty($imagenes_lote)): ?>
+    <?php foreach ($imagenes_lote as $img): ?>
+      <?php
+        $foto_lote = htmlspecialchars($img['foto']);
+        if (!empty($foto_lote)) {
+          $foto_lote = str_replace('uploads/', '', $foto_lote);  // Evitar doble path
+          $src_lote = '/funcion/accion/boletaentrada/uploads/' . $foto_lote;
+        } else {
+          $src_lote = $placeholder;
+        }
+      ?>
+      <div class="img-card">
+        <img src="<?php echo $src_lote; ?>" alt="Imagen del lote" width="100" height="100">
+        <?php if ($img['prioridad'] == 1): ?>
+          <span class="prioridad">Prioritaria</span>
+        <?php endif; ?>
+      </div>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <p>No hay imágenes subidas para este lote.</p>
+  <?php endif; ?>
+</div>
+<div id="preview"></div> 
 
 
     <div class="lote">
