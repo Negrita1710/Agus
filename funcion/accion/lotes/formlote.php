@@ -14,7 +14,7 @@
     }
     $remates = Remates::recuperarTodos();
     $objetos = Objetos::recuperarTodosConMoneda();
-    $imagenes_lote = Imagenes::recuperarPorLote($lotes->getId());  
+    $imagen_lote = Imagenes::recuperarPorLote($lotes->getId());  
     $remate_actual = null;
     if ($id_remate) {
         foreach ($remates as $rem) {
@@ -49,7 +49,6 @@
 
   <!-- FORM: id importante para que el JS lo capture -->
   <form id="form-lote" action="../funcion/accion/lotes/actualizarlote.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_lote" id="idlote" value="<?php echo htmlspecialchars($lotes->getId()); ?>">
     <input type="hidden" name="id_remate" value="<?php echo htmlspecialchars($id_remate); ?>">
     
@@ -80,28 +79,9 @@
 </div>
 <!-- NUEVO: Mostrar imágenes subidas para este lote -->
 <div class="imagenes-lote-grid" id="imagenes-lote-grid">
-  <h3>Imágenes Subidas para este Lote</h3>
-  <?php if (!empty($imagenes_lote)): ?>
-    <?php foreach ($imagenes_lote as $img): ?>
-      <?php
-        $foto_lote = htmlspecialchars($img['foto']);
-        if (!empty($foto_lote)) {
-          $foto_lote = str_replace('uploads/', '', $foto_lote);  // Evitar doble path
-          $src_lote = '/funcion/accion/boletaentrada/uploads/' . $foto_lote;
-        } else {
-          $src_lote = $placeholder;
-        }
-      ?>
-      <div class="img-card">
-        <img src="<?php echo $src_lote; ?>" alt="Imagen del lote" width="100" height="100">
-        <?php if ($img['prioridad'] == 1): ?>
-          <span class="prioridad">Prioritaria</span>
-        <?php endif; ?>
-      </div>
-    <?php endforeach; ?>
-  <?php else: ?>
-    <p>No hay imágenes subidas para este lote.</p>
-  <?php endif; ?>
+ 
+
+
 </div>
 <div id="preview"></div> 
 
