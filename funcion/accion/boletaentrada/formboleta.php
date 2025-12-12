@@ -3,6 +3,7 @@ session_start();
 require_once '../../percistencia/boletaentrada.php';
 require_once '../../percistencia/clientes.php';
 require_once '../../percistencia/objetos.php';
+//holis, viendo si cambiando el coodigo de casa al disco C medio que arregla el problema d las imagenes
 
 $id = $_GET['id'] ?? null;
 $boletaentrada = BoletaEntrada::buscarPorId($id);

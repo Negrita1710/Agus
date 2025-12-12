@@ -3,7 +3,7 @@ session_start();
 require_once '../../percistencia/boletaentrada.php';
 
 header('Content-Type: application/json'); // siempre JSON
-
+//holis, viendo si cambiando el coodigo de casa al disco C medio que arregla el problema d las imagenes
 try {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode(['ok' => false, 'error' => 'Método no permitido']);
