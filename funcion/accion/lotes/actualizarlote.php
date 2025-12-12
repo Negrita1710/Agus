@@ -70,24 +70,40 @@ $ins->execute();
 
     if (!empty($_FILES['foto']['name'][0])) {
         foreach ($_FILES['foto']['name'] as $index => $fileName) {
-            $nombre_archivo = uniqid('img_', true) . "_" . basename($fileName);
-            $archivo_tmp = $_FILES['foto']['tmp_name'][$index];
-            $ruta_destino = "../boletaentrada/uploads/" . $nombre_archivo;
-            $base_datos = "uploads/" . $nombre_archivo;
+$nombre_limpio = str_replace(' ', '_', basename($fileName));
+$nombre_archivo = uniqid('img_', true) . "_" . $nombre_limpio;
 
-            if (move_uploaded_file($archivo_tmp, $ruta_destino)) {
-                $prioridad = ($index === $prioridadSeleccionada) ? 1 : 0;
+$carpeta = realpath(__DIR__ . "/../boletaentrada/uploads");
 
-                $insertarFoto = $db->prepare("
-                    INSERT INTO imagenes (id_remate, id_lote, foto, prioridad) 
-                    VALUES (:id_remate, :id_lote, :foto, :prioridad)
-                ");
-                $insertarFoto->bindValue(':id_remate', $id_remate, PDO::PARAM_INT);
-                $insertarFoto->bindValue(':id_lote', $loteId, PDO::PARAM_INT);
-                $insertarFoto->bindValue(':foto', $base_datos, PDO::PARAM_STR);
-                $insertarFoto->bindValue(':prioridad', $prioridad, PDO::PARAM_INT);
-                $insertarFoto->execute();
-            }
+if ($carpeta === false) {
+    die("ERROR: La carpeta de destino no existe");
+}
+
+$ruta_destino = $carpeta . DIRECTORY_SEPARATOR . $nombre_archivo;
+
+if (!move_uploaded_file($archivo_tmp, $ruta_destino)) {
+    die("ERROR moviendo archivo: " . $ruta_destino);
+}
+
+$base_datos = "uploads/" . $nombre_archivo;
+
+
+$archivo_tmp = $_FILES['foto']['tmp_name'][$index];
+
+if (move_uploaded_file($archivo_tmp, $ruta_destino)) {
+    $prioridad = ($index === $prioridadSeleccionada) ? 1 : 0;
+
+    $insertarFoto = $db->prepare("
+        INSERT INTO imagenes (id_remate, id_lote, foto, prioridad) 
+        VALUES (:id_remate, :id_lote, :foto, :prioridad)
+    ");
+    $insertarFoto->bindValue(':id_remate', $id_remate, PDO::PARAM_INT);
+    $insertarFoto->bindValue(':id_lote', $loteId, PDO::PARAM_INT);
+    $insertarFoto->bindValue(':foto', $base_datos, PDO::PARAM_STR);
+    $insertarFoto->bindValue(':prioridad', $prioridad, PDO::PARAM_INT);
+    $insertarFoto->execute();
+}
+
         }
     }
 
@@ -102,4 +118,11 @@ http_response_code(500);
 echo json_encode(['ok' => false, 'error' => 'Error al actualizar el lote: ' . $e->getMessage()]);
 }
 ?>
-?>
+<script>
+    function ruta_uploads() {
+    return __DIR__ . "/../boletaentrada/uploads/";
+}
+function url_uploads($archivo) {
+    return "/remate/funcion/accion/boletaentrada/uploads/" . $archivo;
+}
+</script>

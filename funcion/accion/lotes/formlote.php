@@ -57,9 +57,10 @@
     <?php
       $foto = htmlspecialchars($obj['foto']);
       if (!empty($foto)) {
-        // Remover 'uploads/' si está presente para evitar doble path
-        $foto = str_replace('uploads/', '', $foto);
-        $src = '/funcion/accion/boletaentrada/uploads/' . $foto;
+
+       $src = "/remate/uploads/" . $foto;
+
+
       } else {
         $src = $placeholder;
       }
