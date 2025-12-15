@@ -43,7 +43,7 @@ session_start();
             
         
             <div class=footer>
-                <p>Pie de página</p>
+                <p>&copy; informacion de contacto:</p>
             </div>
            
      

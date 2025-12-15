@@ -45,6 +45,8 @@ $lote->guardar();
 $loteId = $lote->getId();
 }
 
+
+
 // Actualizar relaciones en la tabla junction
 $db = new Conexion();
 $db->beginTransaction();
@@ -69,29 +71,41 @@ $ins->execute();
     $grupoId = uniqid('grp_', true);
 
     if (!empty($_FILES['foto']['name'][0])) {
-        foreach ($_FILES['foto']['name'] as $index => $fileName) {
-$nombre_limpio = str_replace(' ', '_', basename($fileName));
-$nombre_archivo = uniqid('img_', true) . "_" . $nombre_limpio;
+     foreach ($_FILES['foto']['tmp_name'] as $i => $tmp) {
 
-$carpeta = realpath(__DIR__ . "/../boletaentrada/uploads");
+    // Saltar archivos vacíos
+    if ($_FILES['foto']['error'][$i] !== 0 || $tmp === "") {
+        continue;
+    }
 
-if ($carpeta === false) {
-    die("ERROR: La carpeta de destino no existe");
-}
+    // Nombre original
+    $original = $_FILES['foto']['name'][$i];
 
-$ruta_destino = $carpeta . DIRECTORY_SEPARATOR . $nombre_archivo;
+    // Limpieza del nombre
+    $nombre_limpio = str_replace(' ', '_', basename($original));
 
-if (!move_uploaded_file($archivo_tmp, $ruta_destino)) {
-    die("ERROR moviendo archivo: " . $ruta_destino);
-}
+    // Nombre final único
+    $nombre_archivo = uniqid('img_', true) . "_" . $nombre_limpio;
 
-$base_datos = "uploads/" . $nombre_archivo;
+    // Carpeta física correcta
+    $carpeta = realpath(__DIR__ . "/../boletaentrada/uploads");
 
+    if ($carpeta === false) {
+        die("ERROR: La carpeta de destino no existe");
+    }
 
-$archivo_tmp = $_FILES['foto']['tmp_name'][$index];
+    $ruta_destino = $carpeta . DIRECTORY_SEPARATOR . $nombre_archivo;
 
-if (move_uploaded_file($archivo_tmp, $ruta_destino)) {
-    $prioridad = ($index === $prioridadSeleccionada) ? 1 : 0;
+    // Mover archivo
+    if (!move_uploaded_file($tmp, $ruta_destino)) {
+        die("ERROR moviendo archivo: " . $ruta_destino);
+    }
+
+    // Guardar en BD
+    $base_datos = "uploads/" . $nombre_archivo;
+
+    // prioridad
+    $prioridad = ($i == $prioridadSeleccionada) ? 1 : 0;
 
     $insertarFoto = $db->prepare("
         INSERT INTO imagenes (id_remate, id_lote, foto, prioridad) 
@@ -104,13 +118,14 @@ if (move_uploaded_file($archivo_tmp, $ruta_destino)) {
     $insertarFoto->execute();
 }
 
-        }
-    }
+}
+        
+    
 
 $db->commit();
 
-echo json_encode(['ok' => true, 'lote_id' => $loteId]);
-} catch (Exception $e) {
+header("Location: /remate/work/index.php?id_lote=" . $loteId);
+exit;}catch (Exception $e) {
 if (isset($db)) {
 $db->rollBack();
 }
