@@ -8,6 +8,10 @@ session_start();
         
     <head>
         <script src="https://kit.fontawesome.com/16aa28c921.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
+        
         <meta charset="UTF-8">
         <title>Remates</title>
         

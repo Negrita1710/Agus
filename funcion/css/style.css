@@ -11,7 +11,14 @@
 html {
   font-family: "Lucida Sans", sans-serif;
 }
+.young-serif-regular {
+  font-family: "Young Serif", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .header{
+  font-family: "Young Serif", serif;
     background-color: #11440d;
     color: rgb(255, 255, 255);
     padding: 10px;
@@ -477,7 +484,7 @@ tr:nth-child(even):hover {
   border-radius:6px;
   margin-bottom:8px;
 }
-.obj-card .thumb img { width:100%; height:100%; object-fit:cover; }
+.obj-card .thumb img { width:100%; height:100%; object-fit:contain; }
 .obj-card .meta { text-align:center; font-size:0.9rem; }
 .obj-card input[type="checkbox"]:checked + .thumb { outline: 3px solid #236e43; transform: scale(0.995); 
 }
