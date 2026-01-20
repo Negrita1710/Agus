@@ -88,8 +88,7 @@ $ins->execute();
     $nombre_archivo = uniqid('img_', true) . "_" . $nombre_limpio;
 
     // Carpeta física correcta
-    $carpeta = realpath(__DIR__ . "/../boletaentrada/uploads");
-
+    $carpeta = realpath("../../../uploads");
     if ($carpeta === false) {
         die("ERROR: La carpeta de destino no existe");
     }
@@ -135,7 +134,7 @@ echo json_encode(['ok' => false, 'error' => 'Error al actualizar el lote: ' . $e
 ?>
 <script>
     function ruta_uploads() {
-    return __DIR__ . "/../boletaentrada/uploads/";
+    return "/../../../uploads/";
 }
 function url_uploads($archivo) {
     return "/remate/funcion/accion/boletaentrada/uploads/" . $archivo;

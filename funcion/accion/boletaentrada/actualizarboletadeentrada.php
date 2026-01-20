@@ -49,7 +49,7 @@ try {
                 );
                 // Manejar la imagen si se subió
                 if (isset($_FILES['foto']) && $_FILES['foto']['error'] == UPLOAD_ERR_OK) {
-                    $uploadDir = __DIR__ . '/uploads/';
+                    $uploadDir ='../../../uploads/';
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0755, true);
                     }

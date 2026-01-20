@@ -23,7 +23,7 @@ if (!$id_boleta || !$nombre || !$cantidad || !$valor_esperado) {
 $foto_path = '';
 
 if (!empty($_FILES['foto']['name'])) {
-    $upload_dir = __DIR__ . '/uploads/';
+    $upload_dir =  '../../../uploads/';
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0755, true);
     }
